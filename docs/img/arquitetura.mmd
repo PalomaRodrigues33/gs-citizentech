@@ -1,0 +1,55 @@
+flowchart TB
+    subgraph L1["1 · Fonte"]
+        SP["<b>SP156 - Solicitacoes</b><br/>jul-set/2026 · DADO REAL e aberto<br/>484.232 pedidos · sem dados pessoais"]
+    end
+
+    subgraph L2["2 · Data lake em camadas (data/)"]
+        direction LR
+        RAW["<b>raw</b><br/>arquivo original<br/>intocado"]
+        BRZ["<b>bronze</b><br/>recorte de zeladoria<br/>84.487 pedidos · 13 servicos"]
+        SLV["<b>silver</b><br/>limpo e tipado · dias ate resolver<br/>alvo 7 dias · local do problema"]
+        RAW -->|"ingestion/sp156.py"| BRZ -->|"pipeline/silver.py"| SLV
+    end
+
+    subgraph L3["3 · Analise e IA"]
+        direction LR
+        ML["<b>IA 1 · previsao</b><br/>gradient boosting<br/>treina jul-ago / testa set<br/>AUC 0,861 (antes 0,830)"]
+        AN["<b>SQL analitico</b><br/>RANK · NTILE · LAG<br/>media movel · PERCENT_RANK"]
+        TR["<b>Lista de atrasos</b><br/>rua + tipo<br/>dias de espera somados"]
+    end
+
+    GLD["<b>gold</b> + <b>SQLite</b><br/>pedidos · lista de atrasos<br/>analises · modelo · metricas"]
+
+    subgraph L4["4 · API Python (FastAPI)"]
+        direction LR
+        API["<b>/api</b><br/>regiao · atrasos · assistente<br/>validacao · limite por IP<br/>cabecalhos de seguranca"]
+        LLM["<b>IA 2 · assistente</b><br/>LLM · papel + regras + few-shot<br/>servico exato · texto do pedido<br/>JSON validado · links so do codigo"]
+        API -->|"relato livre"| LLM
+    end
+
+    APP["<b>5 · App React no celular</b><br/>Meu bairro: 3 perguntas, 3 graficos<br/>Fazer pedido: assistente de IA<br/>Atrasos: transparencia publica<br/>Como funciona: fontes e limites"]
+
+    SP156OF["<b>SP156 oficial</b><br/>portal · app · WhatsApp · 156<br/>quem registra e o cidadao"]
+
+    SP -->|"download"| RAW
+    SLV --> ML
+    SLV --> AN
+    SLV --> TR
+    ML --> GLD
+    AN --> GLD
+    TR --> GLD
+    GLD --> API
+    ML -.->|"chance de 7 dias"| API
+    API <--> APP
+    APP -->|"copia o texto e abre o canal"| SP156OF
+
+    classDef real fill:#1b5e20,stroke:#a5d6a7,stroke-width:2px,color:#fff
+    classDef layer fill:#1f4fa3,stroke:#90caf9,stroke-width:2px,color:#fff
+    classDef intel fill:#8e2a1a,stroke:#f0a58a,stroke-width:2px,color:#fff
+    classDef app fill:#37474f,stroke:#b0bec5,stroke-width:2px,color:#fff
+    classDef ext fill:#ffffff,stroke:#1f4fa3,stroke-width:3px,color:#1f4fa3
+    class SP real
+    class RAW,BRZ,SLV,GLD layer
+    class ML,AN,TR,LLM intel
+    class API,APP app
+    class SP156OF ext

@@ -1,0 +1,38 @@
+services:
+  # Gera as camadas de dados, o modelo e o banco. Precisa do arquivo do SP156 em ./data/raw/
+  pipeline:
+    build: .
+    command: python run_all.py
+    volumes:
+      - ./data:/app/data
+
+  # App + API: http://localhost:8000  (no celular, na mesma rede: http://IP-DO-COMPUTADOR:8000)
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-mock}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - LLM_BASE_URL=${LLM_BASE_URL:-}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-}
+    volumes:
+      - ./data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/saude')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Testes automatizados
+  tests:
+    build: .
+    command: python -m pytest -v
+    profiles: ["test"]
+    volumes:
+      - ./data:/app/data
