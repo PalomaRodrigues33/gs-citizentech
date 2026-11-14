@@ -8,6 +8,25 @@ function destacarCampos(texto) {
   return texto.split(/(\[[^\]]+\])/g).map((p, k) => (p.startsWith("[") ? <mark key={k}>{p}</mark> : p));
 }
 
+// Plano B: no celular pelo IP da rede a página não é contexto seguro e navigator.clipboard não existe.
+function copiarPorSelecao(texto) {
+  const ta = document.createElement("textarea");
+  ta.value = texto;
+  ta.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;";
+  document.body.appendChild(ta);
+  let ok = false;
+  try {
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, texto.length);   // iOS ignora select() sozinho
+    ok = document.execCommand("copy");
+  } catch {
+    ok = false;
+  }
+  document.body.removeChild(ta);
+  return ok;
+}
+
 export default function Registrar({ regioes, sub, setSub, preenchido, limparPreenchido }) {
   const [distrito, setDistrito] = useState("");
   const [texto, setTexto] = useState("");
@@ -45,8 +64,16 @@ export default function Registrar({ regioes, sub, setSub, preenchido, limparPree
   }
 
   async function copiar() {
-    try { await navigator.clipboard.writeText(res.texto_solicitacao); setCopiado(true); }
-    catch { setCopiado(false); setErro("Não foi possível copiar automaticamente. Selecione o texto e copie."); }
+    const alvo = res.texto_solicitacao;
+    try {
+      if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(alvo);
+      else if (!copiarPorSelecao(alvo)) throw new Error("sem suporte");
+      setCopiado(true);
+      setErro(null);
+    } catch {
+      setCopiado(false);
+      setErro("Não foi possível copiar automaticamente. Selecione o texto e copie.");
+    }
   }
 
   const ctx = res?.contexto;
