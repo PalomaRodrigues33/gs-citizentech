@@ -24,30 +24,39 @@ WhatsApp ou telefone 156).
 
 ## Como executar
 
-### 1. Baixe os dados do SP156 (uma vez)
+**Requisitos:** Python 3.12+ e Node 20+. O arquivo de dados do SP156 já vem no repositório, em `data/raw/`.
 
-No [Portal de Dados Abertos](https://dados.prefeitura.sp.gov.br/dataset/dados-do-sp156), baixe o arquivo de
-solicitações do 3º trimestre de 2026 (`arquivo-final-3-trim-26.xlsx`) e salve em `data/raw/`.
+```powershell
+python iniciar.py
+```
 
-A pasta `data/` não vem no repositório (é gerada). Se ela não existir, `python run_all.py` cria `data/raw/` e
-mostra o caminho exato onde colocar o arquivo.
+Um comando só. Ele instala as dependências que faltarem, gera as camadas de dados e o modelo (~1 min na
+primeira vez), compila o app React e sobe tudo em **http://localhost:8000**. Nas vezes seguintes pula o que
+já está pronto e sobe na hora.
 
-### 2a. Sem Docker (Python 3.12+ e Node 20+), Windows PowerShell
+```powershell
+python iniciar.py --rede          # libera o acesso pelo celular na mesma rede Wi-Fi
+python iniciar.py --porta 8001    # se a 8000 estiver ocupada
+python iniciar.py --refazer-dados # refaz o pipeline do zero
+python -m pytest -v               # 37 testes
+```
+
+<details>
+<summary>Rodando etapa por etapa, se preferir</summary>
 
 ```powershell
 python -m pip install -r requirements.txt
 python run_all.py                          # 5 etapas: ingestão, limpeza, IA, atrasos, análises
-
 cd web; npm install; npm run build; cd ..
-python -m uvicorn api.main:app --port 8000 # app em http://localhost:8000 · API em /docs
-
-python -m pytest -v                        # 37 testes
+python -m uvicorn api.main:app --port 8000
 ```
 
-Use `python -m pip` e `python -m uvicorn`: no Windows, `pip` e `uvicorn` sozinhos muitas vezes não estão no PATH.
-(No Linux/macOS os mesmos comandos funcionam; troque `;` por `&&` se preferir.)
+Use `python -m pip` e `python -m uvicorn`: no Windows, `pip` e `uvicorn` sozinhos muitas vezes não estão no
+PATH. No Linux e no macOS os mesmos comandos funcionam; troque `;` por `&&` se preferir.
 
-### 2b. Com Docker
+</details>
+
+### Com Docker
 
 ```powershell
 docker compose run --rm pipeline       # gera as camadas, o modelo e o banco (~1 min)
@@ -57,9 +66,9 @@ docker compose --profile test run --rm tests
 
 A imagem é construída e testada automaticamente a cada push (ver [Integração contínua](#integração-contínua)).
 
-**No celular:** com o computador e o celular na mesma rede Wi-Fi, rode a API com `--host 0.0.0.0` e abra
-`http://IP-DO-COMPUTADOR:8000` no navegador do celular. Pelo menu do navegador, "Adicionar à tela inicial"
-instala o app como um ícone.
+**No celular:** rode `python iniciar.py --rede` e abra, no navegador do celular, o endereço que ele mostra
+(algo como `http://192.168.0.10:8000`), com o celular na mesma rede Wi-Fi. Pelo menu do navegador,
+"Adicionar à tela inicial" instala o app como um ícone.
 
 **Para mexer no app** (recarrega a cada alteração): deixe a API rodando e, em outro terminal,
 `cd web; npm run dev` → http://localhost:5173.

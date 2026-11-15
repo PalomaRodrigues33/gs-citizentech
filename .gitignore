@@ -2,7 +2,12 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .env
-data/
+# Tudo em data/ é gerado, menos o arquivo original do SP156, que vai versionado
+# para o projeto rodar com um comando só depois do clone.
+data/*
+!data/raw/
+data/raw/*
+!data/raw/arquivo-final-3-trim-26.xlsx
 web/node_modules/
 web/dist/
 .claude/
