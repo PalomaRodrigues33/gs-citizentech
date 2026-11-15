@@ -72,6 +72,8 @@ def main():
     args = ap.parse_args()
 
     os.chdir(RAIZ)
+    # Sem isso, as mensagens deste script saem fora de ordem em relação à saída do pip e do npm.
+    sys.stdout.reconfigure(line_buffering=True)
 
     passo(1, "Dependências do Python")
     if dependencias_instaladas() and not args.refazer_dados:
