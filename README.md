@@ -95,10 +95,7 @@ Diagrama e decisões em [`docs/arquitetura.md`](docs/arquitetura.md).
 | **IA 2 — assistente** | Lê o relato livre e escolhe o **serviço exato** entre os 13, escreve o pedido e lista o que falta. Sem chave de API roda por regras (83% de acerto, número otimista); a integração com LLM está pronta, mas não foi medida nesta entrega | [`docs/ia.md`](docs/ia.md) |
 | **Segurança** | Nenhum dado pessoal pedido ou guardado; entradas validadas; SQL parametrizado; proteção contra injeção de prompt; limite de chamadas por IP; CSP restritiva | [`docs/plano_de_testes.md`](docs/plano_de_testes.md) |
 | **Qualidade** | 37 testes automatizados | `tests/` |
-| **CI** | A cada push, o GitHub Actions roda os testes, compila o app e **constrói a imagem Docker**, rodando os testes dentro do contêiner e conferindo `/api/saude` | [`ci.yml`](.github/workflows/ci.yml) |
-
-Os testes da API são pulados no CI (aparecem como `SKIPPED`) porque lá o pipeline não é executado e o banco não
-existe. Localmente, com os dados gerados, os 37 rodam.
+| **CI** | A cada push, o GitHub Actions gera os dados e roda os **37 testes**, compila o app e **constrói a imagem Docker**, repetindo o pipeline e os testes dentro do contêiner antes de subir a API e conferir `/api/saude` | [`ci.yml`](.github/workflows/ci.yml) |
 
 ## Limitações
 
