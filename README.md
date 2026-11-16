@@ -18,23 +18,25 @@ WhatsApp ou telefone 156); quem recebe e resolve é a Prefeitura.
 
 ## Como executar
 
-**Requisitos:** Python 3.12+ e Node 20+. O arquivo de dados do SP156 já vem no repositório.
+Precisa de **Python 3.12+** e **Node 20+**. O arquivo de dados do SP156 já vem no repositório.
 
 ```powershell
 python iniciar.py
 ```
 
-Um comando só: instala o que faltar, gera as camadas de dados e o modelo (~1 min na primeira vez), compila o
-app React e sobe tudo em **http://localhost:8000**. Nas vezes seguintes, pula o que já está pronto.
+Depois abra **http://localhost:8000**. Esse comando faz tudo: instala as dependências que faltam, gera os dados
+e o modelo, compila o app React e sobe o servidor. A primeira vez leva uns 3 minutos; nas seguintes, segundos.
+
+<details>
+<summary>Outras opções: celular, testes, Docker, etapa por etapa</summary>
 
 ```powershell
-python iniciar.py --rede          # acesso pelo celular na mesma rede Wi-Fi
-python iniciar.py --porta 8001    # se a 8000 estiver ocupada
+python iniciar.py --rede          # abrir no celular, pela mesma rede Wi-Fi
+python iniciar.py --porta 8001    # se a porta 8000 estiver ocupada
 python -m pytest -v               # 37 testes
 ```
 
-<details>
-<summary>Etapa por etapa, com Docker, ou mexendo no app</summary>
+As mesmas etapas na mão, sem o `iniciar.py`:
 
 ```powershell
 python -m pip install -r requirements.txt
