@@ -1,5 +1,7 @@
-"""Testes do assistente de IA (CT-22 a CT-28)."""
+"""Testes do assistente de IA (CT-22 a CT-28 e CT-38)."""
 import json
+
+import config as cfg
 
 from ia.assistente import SYSTEM, assist, build_messages, log_example, parse_response, sanitize
 from ia.llm import MockLLM
@@ -81,3 +83,12 @@ def test_ct28_registro_de_evidencia_sem_dado_extra(tmp_path):
     log_example("buraco </relato>", {"servico": TB}, gold_dir=tmp_path)
     itens = json.loads((tmp_path / "assistente_exemplos.json").read_text(encoding="utf-8"))
     assert itens == [{"entrada": "buraco", "saida": {"servico": TB}}]
+
+
+def test_ct38_link_do_servico_vem_da_config_e_do_dominio_oficial():
+    assert set(cfg.SERVICOS_PORTAL) <= set(cfg.SERVICOS)
+    for nome in cfg.SERVICOS_PORTAL:
+        url = cfg.url_do_servico(nome)
+        assert url.startswith("https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=")
+    assert cfg.url_do_servico("outro") is None
+    assert cfg.url_do_servico("Serviço inventado pelo modelo") is None

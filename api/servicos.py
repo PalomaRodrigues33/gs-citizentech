@@ -179,6 +179,7 @@ def local_context(servico: str, subprefeitura: str, distrito: str, db_path=None)
 def prepare_request(texto, subprefeitura, distrito, llm, log=True, db_path=None) -> dict:
     r = assist(texto, llm)
     out = {**r, "checklist": cfg.CHECKLIST, "canais": cfg.CANAIS,
+           "url_servico": cfg.url_do_servico(r["servico"]),
            "emergencia": cfg.EMERGENCIA if r["risco_imediato"] else None,
            "contexto": None, "chance_7d_pct": None}
     if r["servico"] != "outro":

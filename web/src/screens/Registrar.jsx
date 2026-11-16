@@ -128,7 +128,9 @@ export default function Registrar({ regioes, sub, setSub, preenchido, limparPree
             ) : (
               <>
                 <span className="placa-mini">{res.servico}</span>
-                <p className="muted small" style={{ marginTop: 8 }}>Procure exatamente esse nome no portal ou no aplicativo.</p>
+                {res.url_servico
+                  ? <a className="link-servico" href={res.url_servico} target="_blank" rel="noopener noreferrer">Abrir a página oficial deste serviço <span aria-hidden="true">›</span></a>
+                  : <p className="muted small" style={{ marginTop: 8 }}>Procure exatamente esse nome no portal ou no aplicativo.</p>}
               </>
             )}
           </div>
@@ -166,9 +168,13 @@ export default function Registrar({ regioes, sub, setSub, preenchido, limparPree
             <h3>Onde enviar</h3>
             <div className="canais">
               {res.canais.map((c) => {
-                const conteudo = <><span><b>{c.nome}</b><span>{c.como}</span></span>{c.url && <span className="canal-seta" aria-hidden="true">›</span>}</>;
-                return c.url
-                  ? <a key={c.id} className="canal" href={c.url} target="_blank" rel="noopener noreferrer">{conteudo}</a>
+                // No portal, o link vai direto na página do serviço escolhido; nos outros canais não há como.
+                const direto = c.id === "portal" && res.url_servico;
+                const url = direto ? res.url_servico : c.url;
+                const como = direto ? "abre já na página deste serviço" : c.como;
+                const conteudo = <><span><b>{c.nome}</b><span>{como}</span></span>{url && <span className="canal-seta" aria-hidden="true">›</span>}</>;
+                return url
+                  ? <a key={c.id} className="canal" href={url} target="_blank" rel="noopener noreferrer">{conteudo}</a>
                   : <div key={c.id} className="canal">{conteudo}</div>;
               })}
             </div>

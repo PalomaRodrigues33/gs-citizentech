@@ -264,6 +264,7 @@ textarea.input { min-height: 132px; resize: vertical; line-height: 1.45; }
 .canal b { display: block; font-weight: 600; }
 .canal span { color: var(--ink-2); font-size: 15px; }
 .canal-seta { color: var(--ink-3); font-size: 22px; line-height: 1; }
+.link-servico { display: inline-block; margin-top: 10px; font-weight: 600; color: var(--placa); text-decoration: underline; text-underline-offset: 3px; }
 .aviso-app { font-size: 14px; color: var(--ink-3); margin-top: 14px; }
 
 /* ---------- atrasos ---------- */

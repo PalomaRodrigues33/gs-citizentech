@@ -59,3 +59,27 @@ calçada danificada — são os que quase nunca são encerrados no trimestre.
 | WhatsApp (Chat SP156): (11) 3230-5156 | [Notícia da Prefeitura, 10/10/2023](https://prefeitura.sp.gov.br/noticia/prefeitura-lanca-servico-do-156-pelo-whatsapp-para-agilizar-atendimento-a-populacao) |
 | O que incluir no pedido (endereço, referência, data, foto) | [Subprefeitura Ipiranga – tapa-buraco](https://prefeitura.sp.gov.br/web/ipiranga/w/opera%C3%A7%C3%A3o-tapa-buraco-no-ipiranga-saiba-como-solicitar-o-servi%C3%A7o) |
 | Calçada em frente a imóvel é responsabilidade do proprietário | [Subprefeitura Ipiranga](https://prefeitura.sp.gov.br/web/ipiranga/w/a-responsabilidade-da-manuten%C3%A7%C3%A3o-das-cal%C3%A7adas-%C3%A9-de-responsabilidade-do-propriet%C3%A1rio) |
+
+### Página de cada serviço no portal (conferido em 16/11/2026)
+
+O portal do SP156 dá um endereço por serviço, `…/portal/servicos/informacao?servico=<id>`, então o app leva o
+cidadão direto à página certa em vez da home. Os ids em `config.SERVICOS_PORTAL` foram conferidos um a um:
+a página responde 200 e o título é exatamente o nome do serviço.
+
+| Serviço | Página oficial |
+|---|---|
+| Tapa-buraco | [952](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=952) |
+| Tapa-buraco em faixa exclusiva ou corredor de ônibus | [3170](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=3170) |
+| Calçada pública - solicitar manutenção | [931](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=931) |
+| Calçada particular - denunciar calçada danificada ou inexistente | [906](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=906) |
+| Guias para travessia de pedestres - Solicitar rebaixamento | [766](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=766) |
+| Guia rebaixada - solicitar fiscalização de rebaixamento irregular | [919](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=919) |
+| Entulho e grandes objetos em via pública - solicitar remoção | [2641](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=2641) |
+| Denunciar descarte irregular de entulho e outros resíduos em área pública | [915](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=915) |
+| Denunciar caçamba irregular de entulho de construção | [751](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=751) |
+| Fazer reclamação de falta de varrição | [945](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=945) |
+| Sacos de varrição - Fazer reclamação de falta de remoção | [946](https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=946) |
+
+Faltam dois dos treze: "Acessibilidade - solicitar avaliação de obstáculo na calçada" e "Sugerir construção de
+calçadas em áreas públicas e praças". Não achamos o id deles e **não inventamos**: nesses dois casos o app
+mostra o nome exato do serviço e manda para o portal geral, como antes.

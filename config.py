@@ -44,6 +44,31 @@ SERVICOS = {
     "Solicitar limpeza de bueiros, boca de lobo e poços de visita": "Bueiro",
 }
 
+# Página de cada serviço no portal, para o link cair no lugar certo em vez da home.
+# Os ids foram conferidos um por um em 16/11/2026: a página /portal/servicos/informacao?servico=<id>
+# responde 200 e o título bate com o nome do serviço. Quem não está aqui cai no portal geral.
+SERVICOS_PORTAL = {
+    "Tapa-buraco": 952,
+    "Tapa-buraco em faixa exclusiva ou corredor de ônibus": 3170,
+    "Calçada pública - solicitar manutenção": 931,
+    "Calçada particular - denunciar calçada danificada ou inexistente": 906,
+    "Guias para travessia de pedestres - Solicitar rebaixamento": 766,
+    "Guia rebaixada - solicitar fiscalização de rebaixamento irregular": 919,
+    "Entulho e grandes objetos em via pública - solicitar remoção": 2641,
+    "Denunciar descarte irregular de entulho e outros resíduos em área pública": 915,
+    "Denunciar caçamba irregular de entulho de construção": 751,
+    "Fazer reclamação de falta de varrição": 945,
+    "Sacos de varrição - Fazer reclamação de falta de remoção": 946,
+}
+PORTAL_SERVICO_URL = "https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico={id}"
+
+
+def url_do_servico(nome: str):
+    """Link da página oficial do serviço. Sai daqui, nunca do modelo."""
+    sid = SERVICOS_PORTAL.get(nome)
+    return PORTAL_SERVICO_URL.format(id=sid) if sid else None
+
+
 # Canais oficiais, conferidos em 14/11/2026. Saem daqui, nunca do modelo: ele não pode inventar link.
 CANAIS = [
     {"id": "portal", "nome": "Portal SP156", "como": "sp156.prefeitura.sp.gov.br, pelo navegador",
