@@ -56,6 +56,34 @@ class MockLLM:
          "Calçada particular - denunciar calçada danificada ou inexistente"),
     )
 
+    # Primeira frase do pedido, por serviço: diz o que está sendo pedido antes de descrever o problema.
+    ABERTURA = {
+        "Tapa-buraco": "Solicito o reparo de buraco no asfalto da via.",
+        "Tapa-buraco em faixa exclusiva ou corredor de ônibus":
+            "Solicito o reparo de buraco no asfalto em faixa exclusiva ou corredor de ônibus.",
+        "Calçada pública - solicitar manutenção": "Solicito a manutenção de calçada pública danificada.",
+        "Calçada particular - denunciar calçada danificada ou inexistente":
+            "Venho denunciar calçada danificada em frente a imóvel particular e solicitar a fiscalização do responsável.",
+        "Acessibilidade - solicitar avaliação de obstáculo na calçada":
+            "Solicito a avaliação de obstáculo na calçada que impede a passagem de pedestres.",
+        "Guias para travessia de pedestres - Solicitar rebaixamento":
+            "Solicito o rebaixamento de guia para travessia de pedestres.",
+        "Guia rebaixada - solicitar fiscalização de rebaixamento irregular":
+            "Solicito a fiscalização de rebaixamento de guia feito de forma irregular.",
+        "Sugerir construção de calçadas em áreas públicas e praças":
+            "Sugiro a construção de calçada em área pública.",
+        "Entulho e grandes objetos em via pública - solicitar remoção":
+            "Solicito a remoção de entulho e objetos grandes deixados em via pública.",
+        "Denunciar descarte irregular de entulho e outros resíduos em área pública":
+            "Venho denunciar descarte irregular de entulho e outros resíduos em área pública.",
+        "Denunciar caçamba irregular de entulho de construção":
+            "Venho denunciar caçamba de entulho de construção em situação irregular.",
+        "Fazer reclamação de falta de varrição": "Venho reclamar da falta de varrição na via.",
+        "Sacos de varrição - Fazer reclamação de falta de remoção":
+            "Venho reclamar da falta de remoção dos sacos de varrição.",
+        "outro": "Solicito atendimento para o problema descrito abaixo.",
+    }
+
     def complete(self, system: str, messages: list[dict]) -> str:
         msg = messages[-1]["content"]
         m = re.search(r"<relato>(.*?)</relato>", msg, re.DOTALL)
@@ -74,12 +102,17 @@ class MockLLM:
         if not re.search(r"\b(dia|dias|semana|semanas|mês|meses|desde|ontem)\b", low):
             faltando.append("Desde quando o problema existe")
         faltando.append("Foto nítida do local")
-        texto = "Solicito atendimento para o seguinte problema: " + relato.rstrip(".") + "."
+        # Uma linha por informação: é assim que o atendente do SP156 lê o campo de descrição.
+        descricao = relato.rstrip(" .")
+        linhas = [self.ABERTURA[servico], "", "Descrição: " + descricao[:1].upper() + descricao[1:] + "."]
         if "Endereço completo" in faltando:
-            texto += " Endereço: [endereço]."
+            linhas.append("Endereço: [endereço completo, com número]")
         if "Ponto de referência" in faltando:
-            texto += " Ponto de referência: [ponto de referência]."
-        texto += " Agradeço a atenção."
+            linhas.append("Ponto de referência: [ponto de referência]")
+        if "Desde quando o problema existe" in faltando:
+            linhas.append("Desde quando: [desde quando o problema existe]")
+        linhas += ["", "Agradeço a atenção."]
+        texto = '\n'.join(linhas)
         return json.dumps({"servico": servico, "resumo": relato[:140], "texto_solicitacao": texto[:700],
                            "informacoes_faltando": faltando, "risco_imediato": False,
                            "confianca": "media"}, ensure_ascii=False)

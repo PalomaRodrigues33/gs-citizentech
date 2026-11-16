@@ -211,4 +211,5 @@ def about() -> dict:
     return {"fonte": {"nome": "SP156 - Solicitações (Prefeitura de São Paulo, dados abertos)",
                       "url": "https://dados.prefeitura.sp.gov.br/dataset/dados-do-sp156",
                       "periodo": "01/07/2026 a 30/09/2026"},
-            "modelo_7_dias": m, "assistente": ma, "canais": cfg.CANAIS}
+            "modelo_7_dias": m, "assistente": ma, "canais": cfg.CANAIS,
+            "provedor_assistente": cfg.LLM_PROVIDER}

@@ -15,9 +15,14 @@ export default function Sobre() {
 
       <h2>O que a inteligência artificial faz</h2>
       <ul>
-        <li><b>Entende o seu relato</b> e escolhe, entre 13 serviços do SP156, aquele em que o pedido deve ser aberto. Também escreve o texto e avisa o que falta informar.</li>
+        <li><b>Lê o seu relato</b> e escolhe, entre 13 serviços do SP156, aquele em que o pedido deve ser aberto. Também monta o texto para colar e avisa o que falta informar.</li>
         <li><b>Estima a chance de solução em 7 dias</b>, aprendendo com o histórico do tipo de problema e da região.</li>
       </ul>
+      {d?.provedor_assistente === "mock" && (
+        <p className="muted small">Nesta instalação o assistente está no modo sem chave de API: a escolha do serviço e o
+          texto saem de regras de palavras-chave, não de um modelo de linguagem. A integração com o modelo está pronta
+          e basta configurar a chave.</p>
+      )}
       {m && (
         <table className="metricas">
           <tbody>
