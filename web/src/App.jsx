@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { api, prefs } from "./api.js";
 import TabBar from "./components/TabBar.jsx";
 import Bairro from "./screens/Bairro.jsx";
@@ -11,23 +11,29 @@ export default function App() {
   const [regioes, setRegioes] = useState(null);
   const [grupos, setGrupos] = useState([]);
   const [erro, setErro] = useState(null);
-  const [sub, setSubState] = useState(prefs.get("subprefeitura"));
+  const [distrito, setDistritoState] = useState(prefs.get("distrito"));
   const [grupo, setGrupo] = useState(null);
   const [preenchido, setPreenchido] = useState(null);
+
+  // O cidadão escolhe o bairro; a subprefeitura sai daqui, porque ninguém sabe a sua de cor.
+  const regiaoDe = useMemo(
+    () => Object.fromEntries(Object.entries(regioes || {}).flatMap(([s, ds]) => ds.map((d) => [d, s]))),
+    [regioes]);
+  const sub = regiaoDe[distrito] || null;
 
   useEffect(() => {
     api.regioes().then((r) => {
       setRegioes(r.subprefeituras);
       setGrupos(r.grupos);
-      if (!sub || !r.subprefeituras[sub]) setSubState(Object.keys(r.subprefeituras)[0]);
+      const todos = Object.values(r.subprefeituras).flat();
+      if (!distrito || !todos.includes(distrito)) setDistritoState(todos.sort()[0]);
     }).catch((e) => setErro(e.message));
   }, []); // eslint-disable-line
 
-  const setSub = (s) => { setSubState(s); if (s) prefs.set("subprefeitura", s); };
+  const setDistrito = (d) => { setDistritoState(d); if (d) prefs.set("distrito", d); };
   const irPara = (a) => { setAba(a); window.scrollTo({ top: 0 }); };
   const reforcar = (it) => {
     setPreenchido({
-      subprefeitura: it.subprefeitura,
       distrito: it.distrito,
       texto: `Problema de ${it.grupo.toLowerCase()} na ${it.logradouro || "[endereço]"}, com pedido aberto no SP156 há ${it.dias_em_aberto} dias e ainda sem solução. Também me afeta. `,
     });
@@ -40,13 +46,16 @@ export default function App() {
         {erro && <p className="erro" style={{ marginTop: 24 }}>{erro}</p>}
         {!regioes && !erro && <p className="carregando">Carregando…</p>}
         {regioes && aba === "bairro" && (
-          <Bairro regioes={regioes} grupos={grupos} sub={sub} setSub={setSub} grupo={grupo} setGrupo={setGrupo} irPara={irPara} />
+          <Bairro regioes={regioes} grupos={grupos} sub={sub} distrito={distrito} setDistrito={setDistrito}
+            grupo={grupo} setGrupo={setGrupo} irPara={irPara} />
         )}
         {regioes && aba === "registrar" && (
-          <Registrar regioes={regioes} sub={sub} setSub={setSub} preenchido={preenchido} limparPreenchido={() => setPreenchido(null)} />
+          <Registrar regioes={regioes} sub={sub} distrito={distrito} setDistrito={setDistrito}
+            preenchido={preenchido} limparPreenchido={() => setPreenchido(null)} />
         )}
         {regioes && aba === "atrasos" && (
-          <Atrasos regioes={regioes} grupos={grupos} sub={sub} setSub={setSub} grupo={grupo} setGrupo={setGrupo} reforcar={reforcar} />
+          <Atrasos regioes={regioes} grupos={grupos} subPadrao={sub}
+            grupo={grupo} setGrupo={setGrupo} reforcar={reforcar} />
         )}
         {aba === "sobre" && <Sobre />}
       </main>

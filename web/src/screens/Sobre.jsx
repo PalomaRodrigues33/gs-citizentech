@@ -39,6 +39,7 @@ export default function Sobre() {
         <li>A chance de solução é uma estimativa estatística, não um prazo prometido pela Prefeitura.</li>
         <li>Os dados vão até 30/09/2026. Um problema da lista de atrasos pode ter sido resolvido depois.</li>
         <li>A manutenção da calçada em frente a um imóvel é responsabilidade do dono; a Prefeitura fiscaliza.</li>
+        <li>Os números são da subprefeitura que atende o seu bairro, não do bairro sozinho: em muitos distritos os pedidos de um tipo são poucos demais para um número confiável.</li>
       </ul>
 
       <h2>Privacidade</h2>

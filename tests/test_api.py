@@ -1,4 +1,4 @@
-"""Testes da API (CT-29 a CT-37). Usam os dados gerados por `python run_all.py`; sem eles, são ignorados."""
+"""Testes da API (CT-29 a CT-37 e CT-39). Usam os dados gerados por `python run_all.py`; sem eles, são ignorados."""
 import pytest
 from fastapi.testclient import TestClient
 
@@ -80,3 +80,12 @@ def test_ct37_cabecalhos_de_seguranca(c):
     h = c.get("/api/saude").headers
     assert h["x-content-type-options"] == "nosniff" and h["x-frame-options"] == "DENY"
     assert "default-src 'self'" in h["content-security-policy"]
+
+
+def test_ct39_cada_bairro_em_uma_regiao_so_e_sem_orgao_na_lista(c):
+    subs = c.get("/api/regioes").json()["subprefeituras"]
+    assert not set(subs) & set(cfg.ORGAOS_NAO_REGIAO)
+    distritos = [d for ds in subs.values() for d in ds]
+    assert len(distritos) == len(set(distritos))   # o cidadão acha o bairro dele uma vez só
+    atrasos = c.get("/api/atrasos?subprefeitura=MOOCA&limite=5").json()
+    assert all(i["subprefeitura"] == "MOOCA" for i in atrasos["itens"])

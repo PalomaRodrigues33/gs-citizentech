@@ -44,6 +44,14 @@ SERVICOS = {
     "Solicitar limpeza de bueiros, boca de lobo e poços de visita": "Bueiro",
 }
 
+# A coluna do SP156 é "Prefeitura Operacional": quase sempre é a subprefeitura da região, mas às vezes
+# é o órgão que executou o serviço. Órgão não é bairro de ninguém, então fica fora da lista de regiões.
+ORGAOS_NAO_REGIAO = (
+    "Superintendencia das Usinas de Asfalto",
+    "Departamento de Estradas de Rodagem",
+    "Secretaria Municipal do Verde e do Meio Ambiente",
+)
+
 # Página de cada serviço no portal, para o link cair no lugar certo em vez da home.
 # Os ids foram conferidos um por um em 16/11/2026: a página /portal/servicos/informacao?servico=<id>
 # responde 200 e o título bate com o nome do serviço. Quem não está aqui cai no portal geral.

@@ -27,8 +27,7 @@ function copiarPorSelecao(texto) {
   return ok;
 }
 
-export default function Registrar({ regioes, sub, setSub, preenchido, limparPreenchido }) {
-  const [distrito, setDistrito] = useState("");
+export default function Registrar({ regioes, sub, distrito, setDistrito, preenchido, limparPreenchido }) {
   const [texto, setTexto] = useState("");
   const [res, setRes] = useState(null);
   const [erro, setErro] = useState(null);
@@ -36,13 +35,9 @@ export default function Registrar({ regioes, sub, setSub, preenchido, limparPree
   const [copiado, setCopiado] = useState(false);
   const topoResultado = useRef(null);
 
-  const distritos = sub ? regioes[sub] || [] : [];
-  useEffect(() => { if (!distritos.includes(distrito)) setDistrito(distritos[0] || ""); }, [sub]); // eslint-disable-line
-
   useEffect(() => {
     if (!preenchido) return;
-    if (preenchido.subprefeitura) setSub(preenchido.subprefeitura);
-    setTimeout(() => preenchido.distrito && setDistrito(preenchido.distrito), 0);
+    if (preenchido.distrito) setDistrito(preenchido.distrito);
     setTexto(preenchido.texto || "");
     setRes(null);
     limparPreenchido();
@@ -84,18 +79,18 @@ export default function Registrar({ regioes, sub, setSub, preenchido, limparPree
 
       <form onSubmit={preparar}>
         <div className="passo">
-          <h2 className="passo-titulo"><span className="passo-num">1</span>Onde é o problema?</h2>
-          <label className="campo"><span>Subprefeitura</span>
-            <select className="input" value={sub || ""} onChange={(e) => setSub(e.target.value)} required>
-              {!sub && <option value="">Escolha…</option>}
-              {Object.keys(regioes).map((s) => <option key={s}>{s}</option>)}
+          <h2 className="passo-titulo"><span className="passo-num">1</span>Em que bairro?</h2>
+          <label className="campo"><span>Bairro</span>
+            <select className="input" value={distrito || ""} onChange={(e) => setDistrito(e.target.value)} required>
+              {!distrito && <option value="">Escolha…</option>}
+              {Object.entries(regioes).map(([regiao, ds]) => (
+                <optgroup key={regiao} label={regiao}>
+                  {ds.map((d) => <option key={d}>{d}</option>)}
+                </optgroup>
+              ))}
             </select>
           </label>
-          <label className="campo"><span>Distrito</span>
-            <select className="input" value={distrito} onChange={(e) => setDistrito(e.target.value)} required>
-              {distritos.map((d) => <option key={d}>{d}</option>)}
-            </select>
-          </label>
+          {sub && <p className="muted small">Subprefeitura {sub}, que é quem atende esse bairro.</p>}
         </div>
 
         <div className="passo">

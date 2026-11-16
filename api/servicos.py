@@ -30,11 +30,19 @@ def data_ready(db_path=None) -> bool:
 
 @lru_cache(maxsize=1)
 def regions(db_path=None) -> dict[str, list[str]]:
+    """Cada distrito sob uma única região: a que mais atende aquele distrito nos dados.
+
+    Vale 98% dos pedidos; o resto é pedido que outra subprefeitura ou um órgão executou. Sem isso o
+    mesmo distrito aparece em três ou quatro regiões e ninguém sabe qual é a sua.
+    """
     with closing(connect(db_path)) as con:
-        df = pd.read_sql("select distinct subprefeitura, distrito from pedidos "
+        df = pd.read_sql("select subprefeitura, distrito, count(*) as n from pedidos "
                          "where subprefeitura is not null and distrito is not null "
-                         "and subprefeitura not like '%nao encontrada%'", con)
-    return {s: sorted(g["distrito"]) for s, g in sorted(df.groupby("subprefeitura"))}
+                         "and subprefeitura not like '%nao encontrada%' "
+                         "group by subprefeitura, distrito", con)
+    df = df[~df["subprefeitura"].isin(cfg.ORGAOS_NAO_REGIAO)]
+    dom = df.sort_values("n", ascending=False).drop_duplicates("distrito")
+    return {s: sorted(g["distrito"]) for s, g in sorted(dom.groupby("subprefeitura"))}
 
 
 @lru_cache(maxsize=1)

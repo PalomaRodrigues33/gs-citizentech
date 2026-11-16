@@ -5,7 +5,9 @@ import Chips from "../components/Chips.jsx";
 const fmtVezes = (v) => (v >= 10 ? Math.round(v) : v.toFixed(1).replace(".", ","));
 const mapa = (lat, lon) => `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=18/${lat}/${lon}`;
 
-export default function Atrasos({ regioes, grupos, sub, setSub, grupo, setGrupo, reforcar }) {
+export default function Atrasos({ regioes, grupos, subPadrao, grupo, setGrupo, reforcar }) {
+  // Aqui a região é filtro de consulta, não o bairro da pessoa: começa no dela e muda sem mexer nas outras telas.
+  const [sub, setSub] = useState(subPadrao);
   const [dados, setDados] = useState(null);
   const [erro, setErro] = useState(null);
 
@@ -22,7 +24,7 @@ export default function Atrasos({ regioes, grupos, sub, setSub, grupo, setGrupo,
       <p className="lede">Pedidos que seguiam abertos no SP156 em 30/09. No topo, onde mais gente espera há mais tempo.</p>
 
       <div className="filtros">
-        <label className="campo" style={{ marginBottom: 0 }}><span>Subprefeitura</span>
+        <label className="campo" style={{ marginBottom: 0 }}><span>Região</span>
           <select className="input" value={sub || ""} onChange={(e) => setSub(e.target.value || null)}>
             <option value="">Cidade inteira</option>
             {Object.keys(regioes).map((s) => <option key={s}>{s}</option>)}

@@ -83,3 +83,20 @@ a página responde 200 e o título é exatamente o nome do serviço.
 Faltam dois dos treze: "Acessibilidade - solicitar avaliação de obstáculo na calçada" e "Sugerir construção de
 calçadas em áreas públicas e praças". Não achamos o id deles e **não inventamos**: nesses dois casos o app
 mostra o nome exato do serviço e manda para o portal geral, como antes.
+
+## Região e bairro
+
+A planilha do SP156 traz **"Prefeitura Operacional"**, que é quem executou o serviço, e **"Distrito"**, que é
+onde o problema está. Quase sempre a prefeitura operacional é a subprefeitura da região, mas nem sempre: um
+tapa-buraco pode sair pela Superintendência das Usinas de Asfalto, e um pedido de divisa pode cair na
+subprefeitura vizinha. Por isso o mesmo distrito aparecia em três ou quatro "regiões" diferentes, e a lista
+oferecida ao cidadão misturava bairros com órgãos.
+
+O app resolve assim: **cada distrito pertence à região que mais o atende nos dados**. Isso já vale para 98%
+dos pedidos, e o resultado reproduz a geografia oficial das subprefeituras — a Mooca, por exemplo, fica com
+Água Rasa, Belém, Brás, Mooca, Pari e Tatuapé, exatamente os seus seis distritos. Os três órgãos executores
+que não são região (`config.ORGAOS_NAO_REGIAO`) saem da lista de escolha e do ranking de regiões, onde um
+deles aparecia em último lugar como se fosse um bairro.
+
+Os dados em `data/silver` continuam como vieram: a mudança é na lista que o app oferece e no ranking. O
+cidadão escolhe o **bairro**, que é o que ele sabe de cor, e o app mostra de qual subprefeitura ele depende.

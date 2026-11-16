@@ -5,6 +5,10 @@ WITH r AS (
     SELECT subprefeitura, COUNT(*) AS pedidos, AVG(resolvido_7d) AS taxa_7d
     FROM pedidos
     WHERE subprefeitura IS NOT NULL AND subprefeitura NOT LIKE '%nao encontrada%'
+      -- Órgãos executores não são região (config.ORGAOS_NAO_REGIAO): apareciam no ranking como se fossem bairro.
+      AND subprefeitura NOT IN ('Superintendencia das Usinas de Asfalto',
+                                'Departamento de Estradas de Rodagem',
+                                'Secretaria Municipal do Verde e do Meio Ambiente')
       AND (:grupo IS NULL OR grupo = :grupo)
     GROUP BY subprefeitura
     HAVING SUM(CASE WHEN resolvido_7d IS NOT NULL THEN 1 ELSE 0 END) >= 20
