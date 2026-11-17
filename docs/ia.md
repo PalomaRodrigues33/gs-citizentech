@@ -122,6 +122,12 @@ chamada deste prompt gasta cerca de 2.400; rodar a avaliação dos 30 relatos du
 estourar, a API responde 429 e o aplicativo entrega o rascunho simples com aviso, sem quebrar — é o caminho de
 falha do CT-26.
 
+Para efeito de uso normal, 200 mil tokens por dia dão cerca de **80 pedidos**, bem mais do que uma demonstração
+consome; o gasto grande vem de rodar a avaliação, que não precisa ser repetida. O teto é **por modelo**: se o
+`gpt-oss-120b` estourar, o `gpt-oss-20b` ainda responde, mas vale como reserva e não como principal — nos nossos
+testes ele se recusa a responder ao relato com tentativa de injeção em vez de tratar só o problema real, e aí o
+cidadão cai no rascunho de regras.
+
 Toda chamada real ao assistente é registrada (sem IP nem dado pessoal) em `data/gold/assistente_exemplos.json`.
 Exemplo com as regras simples, que mostra o limite delas:
 
