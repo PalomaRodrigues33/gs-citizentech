@@ -100,7 +100,7 @@ export default function Registrar({ regioes, sub, distrito, setDistrito, preench
               onChange={(e) => setTexto(e.target.value)} required minLength={10} />
           </label>
           <div className="contador">{texto.length}/500</div>
-          <p className="muted small">Não escreva seu nome, CPF ou telefone. O CitizenTech não precisa deles.</p>
+          <p className="muted small">Não escreva seu nome, CPF ou telefone. O ZeladoriaSP não precisa deles.</p>
         </div>
 
         <button type="submit" className="btn btn-full" disabled={enviando || !sub || !distrito}>
@@ -173,7 +173,7 @@ export default function Registrar({ regioes, sub, distrito, setDistrito, preench
                   : <div key={c.id} className="canal">{conteudo}</div>;
               })}
             </div>
-            <p className="aviso-app">Depois de enviar, guarde o número de protocolo que o SP156 informar: é com ele que você acompanha o pedido. O CitizenTech não envia nem guarda o seu pedido.</p>
+            <p className="aviso-app">Depois de enviar, guarde o número de protocolo que o SP156 informar: é com ele que você acompanha o pedido. O ZeladoriaSP não envia nem guarda o seu pedido.</p>
           </div>
         </div>
       )}

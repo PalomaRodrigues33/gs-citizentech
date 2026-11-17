@@ -1,4 +1,4 @@
-"""Sobe o CitizenTech com um comando: dependências, dados, app compilado e API.
+"""Sobe o ZeladoriaSP com um comando: dependências, dados, app compilado e API.
 
 Uso:  python iniciar.py                 http://localhost:8000
       python iniciar.py --porta 8001
@@ -65,7 +65,7 @@ def ip_da_rede() -> str:
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Sobe o CitizenTech inteiro com um comando.")
+    ap = argparse.ArgumentParser(description="Sobe o ZeladoriaSP inteiro com um comando.")
     ap.add_argument("--porta", type=int, default=8000)
     ap.add_argument("--rede", action="store_true", help="aceita acesso de outros aparelhos da rede")
     ap.add_argument("--refazer-dados", action="store_true", help="refaz o pipeline mesmo se já houver dados")

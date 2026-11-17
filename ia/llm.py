@@ -212,7 +212,7 @@ class GeminiLLM:
     def listar_modelos(self) -> list[str]:
         """Nomes de modelos que aceitam generateContent com a sua chave."""
         url = "https://generativelanguage.googleapis.com/v1beta/models?pageSize=200"
-        req = urllib.request.Request(url, headers={"x-goog-api-key": self.api_key, "User-Agent": "citizentech/1.0"})
+        req = urllib.request.Request(url, headers={"x-goog-api-key": self.api_key, "User-Agent": "zeladoriasp/1.0"})
         try:
             with urllib.request.urlopen(req, timeout=30) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
@@ -242,7 +242,7 @@ class OpenAICompatLLM:
     def _headers(self) -> dict:
         # User-Agent próprio: alguns provedores (atrás de Cloudflare) bloqueiam o padrão do urllib
         return {"content-type": "application/json", "authorization": f"Bearer {self.api_key}",
-                "user-agent": "citizentech/1.0"}
+                "user-agent": "zeladoriasp/1.0"}
 
     def complete(self, system: str, messages: list[dict]) -> str:
         body = json.dumps({

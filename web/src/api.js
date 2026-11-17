@@ -35,9 +35,9 @@ export const api = {
 // Preferências do aparelho (só conveniência: o app funciona sem elas).
 export const prefs = {
   get(key) {
-    try { return localStorage.getItem(`citizentech.${key}`); } catch { return null; }
+    try { return localStorage.getItem(`zeladoriasp.${key}`); } catch { return null; }
   },
   set(key, value) {
-    try { localStorage.setItem(`citizentech.${key}`, value); } catch { /* modo privado */ }
+    try { localStorage.setItem(`zeladoriasp.${key}`, value); } catch { /* modo privado */ }
   },
 };

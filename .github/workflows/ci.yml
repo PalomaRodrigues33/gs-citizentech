@@ -41,17 +41,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Construir a imagem
-        run: docker build -t citizentech:ci .
+        run: docker build -t zeladoriasp:ci .
       - name: Imagem gerada
-        run: docker images citizentech
+        run: docker images zeladoriasp
       # A pasta data/ fica fora da imagem (.dockerignore); entra por volume, como no docker-compose
       - name: Gerar os dados dentro do contêiner
-        run: docker run --rm -v "$PWD/data:/app/data" citizentech:ci python run_all.py
+        run: docker run --rm -v "$PWD/data:/app/data" zeladoriasp:ci python run_all.py
       - name: Testes dentro do contêiner
-        run: docker run --rm -v "$PWD/data:/app/data" citizentech:ci python -m pytest -v -rs
+        run: docker run --rm -v "$PWD/data:/app/data" zeladoriasp:ci python -m pytest -v -rs
       - name: Subir a API e conferir /api/saude
         run: |
-          docker run -d --name citizentech -p 8000:8000 -v "$PWD/data:/app/data" citizentech:ci
+          docker run -d --name zeladoriasp -p 8000:8000 -v "$PWD/data:/app/data" zeladoriasp:ci
           for i in $(seq 1 30); do
             if curl -fsS http://localhost:8000/api/saude; then echo; break; fi
             sleep 1
@@ -59,10 +59,10 @@ jobs:
           curl -fsS http://localhost:8000/api/saude
           echo
           curl -fsSI http://localhost:8000/api/saude | grep -iE "content-security-policy|x-frame-options|x-content-type-options"
-          docker ps --filter name=citizentech
+          docker ps --filter name=zeladoriasp
       - name: Logs do contêiner
         if: always()
-        run: docker logs citizentech || true
+        run: docker logs zeladoriasp || true
       - name: Parar o contêiner
         if: always()
-        run: docker rm -f citizentech || true
+        run: docker rm -f zeladoriasp || true

@@ -1,4 +1,4 @@
-"""Configuração central do CitizenTech (assistente do cidadão para o SP156)."""
+"""Configuração central do ZeladoriaSP (assistente do cidadão para o SP156)."""
 import os
 from pathlib import Path
 
@@ -34,7 +34,7 @@ RAW_DIR = DATA_DIR / "raw"
 BRONZE_DIR = DATA_DIR / "bronze"
 SILVER_DIR = DATA_DIR / "silver"
 GOLD_DIR = DATA_DIR / "gold"
-DB_PATH = DATA_DIR / "citizentech.db"
+DB_PATH = DATA_DIR / "zeladoriasp.db"
 MODEL_PATH = DATA_DIR / "modelo_7dias.pkl"
 WEB_DIST = BASE_DIR / "web" / "dist"
 

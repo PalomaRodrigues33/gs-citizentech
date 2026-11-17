@@ -1,16 +1,18 @@
 // Capturas das 4 telas para o PDF (iPhone 13 simulado, claro e escuro).
 // Uso (com a API rodando em http://localhost:8000):  node scripts/capturas.js
+// Em outra porta:  BASE=http://localhost:8001 node scripts/capturas.js
 // Requer o Playwright: npm i -D playwright && npx playwright install chromium
 const { chromium, devices } = require("playwright");
 const path = require("path");
 
 (async () => {
+  const base = process.env.BASE || "http://localhost:8000";
   const out = path.join(__dirname, "..", "capturas", "telas");
   const browser = await chromium.launch();
   for (const scheme of ["light", "dark"]) {
     const ctx = await browser.newContext({ ...devices["iPhone 13"], deviceScaleFactor: 2, colorScheme: scheme });
     const p = await ctx.newPage();
-    await p.goto("http://localhost:8000/");
+    await p.goto(`${base}/`);
     // na captura de página inteira, a barra de abas vai para o fim da página (no uso real ela fica fixa)
     await p.addStyleTag({ content: "html{position:relative} .tabbar{position:absolute !important}" });
     await p.waitForSelector(".hero-num");

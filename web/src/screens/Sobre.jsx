@@ -8,7 +8,7 @@ export default function Sobre() {
   return (
     <section className="screen sobre" aria-labelledby="t-sobre">
       <h1 id="t-sobre" className="screen-title">Como funciona</h1>
-      <p className="lede">O CitizenTech mostra quanto tempo a Prefeitura leva para resolver problemas de rua e calçada no seu bairro e ajuda você a abrir o pedido certo no SP156. Ele não substitui o SP156: quem recebe e resolve é a Prefeitura.</p>
+      <p className="lede">O ZeladoriaSP mostra quanto tempo a Prefeitura leva para resolver problemas de rua e calçada no seu bairro e ajuda você a abrir o pedido certo no SP156. Ele não substitui o SP156: quem recebe e resolve é a Prefeitura.</p>
 
       <h2>De onde vêm os dados</h2>
       <p>Dos pedidos feitos ao SP156 entre julho e setembro de 2026, publicados pela Prefeitura no <a href="https://dados.prefeitura.sp.gov.br/dataset/dados-do-sp156" target="_blank" rel="noopener noreferrer">Portal de Dados Abertos</a>. São 84.487 pedidos de buraco, calçada e acessibilidade, entulho, varrição e bueiro. O arquivo não tem nome nem contato de quem pediu.</p>

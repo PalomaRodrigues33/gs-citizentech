@@ -17,7 +17,7 @@ from api import servicos
 from api.validacao import PedidoAssistente, validate_group, validate_region
 from ia.llm import get_llm
 
-app = FastAPI(title="CitizenTech API", version="2.0",
+app = FastAPI(title="ZeladoriaSP API", version="2.0",
               description="Assistente do cidadão para o SP156 e transparência da zeladoria em São Paulo.")
 app.add_middleware(CORSMiddleware, allow_origins=cfg.CORS_ORIGINS, allow_methods=["GET", "POST"],
                    allow_headers=["content-type"])
