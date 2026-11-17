@@ -3,6 +3,32 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
+
+
+def _carregar_env(caminho: Path = None) -> None:
+    """Lê o arquivo .env, se existir, e joga nas variáveis de ambiente.
+
+    Feito na mão, com a biblioteca padrão, para não acrescentar dependência. O que já está no ambiente
+    tem prioridade: assim a chave exportada no terminal ou o segredo do CI ganham do arquivo.
+    O .env nunca vai para o Git (está no .gitignore): é onde a chave de API fica na máquina do dono.
+    """
+    caminho = caminho or BASE_DIR / ".env"
+    try:
+        linhas = caminho.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for linha in linhas:
+        linha = linha.strip()
+        if not linha or linha.startswith("#") or "=" not in linha:
+            continue
+        chave, _, valor = linha.partition("=")
+        chave = chave.strip()
+        valor = valor.strip().strip('"').strip("'")
+        if chave and chave not in os.environ:
+            os.environ[chave] = valor
+
+
+_carregar_env()
 DATA_DIR = Path(os.getenv("DATA_DIR", BASE_DIR / "data"))
 RAW_DIR = DATA_DIR / "raw"
 BRONZE_DIR = DATA_DIR / "bronze"

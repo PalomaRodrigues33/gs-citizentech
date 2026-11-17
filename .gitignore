@@ -16,3 +16,4 @@ web/dist/
 node_modules/
 docs/img/telas/
 docs/pitch.md
+.vscode/

@@ -1,7 +1,7 @@
 # Plano de testes
 
 Execução: `python -m pytest -v` (ou `docker compose --profile test run --rm tests`).
-**Evidência para o PDF:** print do terminal com `39 passed`.
+**Evidência para o PDF:** print do terminal com `40 passed`.
 
 Os testes de API (CT-29 a CT-37) usam os dados reais gerados por `python run_all.py`; sem eles, são ignorados
 (aparecem como `skipped`). Nos testes, a IA não grava exemplos na camada gold.
@@ -47,6 +47,7 @@ Os testes de API (CT-29 a CT-37) usam os dados reais gerados por `python run_all
 | CT-37 | API/segurança | Cabeçalhos | `nosniff`, `DENY`, CSP `default-src 'self'` |
 | CT-38 | Segurança | Link da página do serviço no SP156 | Sai da `config`, domínio oficial; nome fora dos 13 não gera link |
 | CT-39 | API/dados | Lista de regiões e bairros | Cada distrito em uma região só; nenhum órgão executor na lista |
+| CT-40 | Segurança | Chave de API fora do código | Lê do `.env` (não versionado); variável de ambiente tem prioridade |
 
 ## Teste de interface (evidência visual)
 

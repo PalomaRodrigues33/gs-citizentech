@@ -1,5 +1,6 @@
-"""Testes do assistente de IA (CT-22 a CT-28 e CT-38)."""
+"""Testes do assistente de IA (CT-22 a CT-28, CT-38 e CT-40)."""
 import json
+import os
 
 import config as cfg
 
@@ -92,3 +93,18 @@ def test_ct38_link_do_servico_vem_da_config_e_do_dominio_oficial():
         assert url.startswith("https://sp156.prefeitura.sp.gov.br/portal/servicos/informacao?servico=")
     assert cfg.url_do_servico("outro") is None
     assert cfg.url_do_servico("Serviço inventado pelo modelo") is None
+
+
+def test_ct40_env_carrega_a_chave_e_nao_sobrescreve_o_ambiente(tmp_path, monkeypatch):
+    """A chave de API sai do .env (fora do Git) ou do ambiente; o ambiente tem prioridade."""
+    env = tmp_path / ".env"
+    env.write_text('LLM_PROVIDER=groq\nGROQ_API_KEY="chave de teste"\n# comentario\nSEM_IGUAL\n',
+                   encoding="utf-8")
+    monkeypatch.setenv("LLM_PROVIDER", "mock")
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    cfg._carregar_env(env)
+    assert os.environ["LLM_PROVIDER"] == "mock"          # exportado no terminal ganha do arquivo
+    assert os.environ["GROQ_API_KEY"] == "chave de teste"
+    assert "SEM_IGUAL" not in os.environ
+    cfg._carregar_env(tmp_path / "nao_existe")           # ausência de .env não quebra nada
+    assert not (cfg.BASE_DIR / ".env").exists() or ".env" in (cfg.BASE_DIR / ".gitignore").read_text()

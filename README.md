@@ -33,7 +33,7 @@ e o modelo, compila o app React e sobe o servidor. A primeira vez leva uns 3 min
 ```powershell
 python iniciar.py --rede          # abrir no celular, pela mesma rede Wi-Fi
 python iniciar.py --porta 8001    # se a porta 8000 estiver ocupada
-python -m pytest -v               # 39 testes
+python -m pytest -v               # 40 testes
 ```
 
 As mesmas etapas na mão, sem o `iniciar.py`:
@@ -57,6 +57,9 @@ docker compose --profile test run --rm tests
 ```
 
 Para mexer no app, com recarga a cada alteração: deixe a API rodando e, em outro terminal, `cd web; npm run dev`.
+
+Para ligar o modelo de linguagem no assistente (sem chave ele funciona por regras): copie `.env.exemplo` para
+`.env`, preencha a chave e rode de novo. O `.env` não vai para o Git.
 
 </details>
 
@@ -95,9 +98,9 @@ Diagrama e decisões em [`docs/arquitetura.md`](docs/arquitetura.md).
 | **Funções analíticas** | 4 consultas SQL com funções de janela (`ROW_NUMBER`, `LAG`, `RANK`, `NTILE`, `PERCENT_RANK`, média móvel), sempre parametrizadas | `analytics/sql/` |
 | **IA 1 — previsão** | Chance de resolução em 7 dias. Treina em jul–ago, testa em setembro: AUC **0,861** contra 0,830 da regra simples; dentro de cada tipo a regra não distingue nada (0,50) e o modelo chega a 0,90 | [`docs/ia.md`](docs/ia.md) |
 | **IA 2 — assistente** | Lê o relato livre e escolhe o **serviço exato** entre os 13, escreve o pedido e lista o que falta. Sem chave de API roda por regras (83% de acerto, número otimista); a integração com LLM está pronta, mas não foi medida nesta entrega | [`docs/ia.md`](docs/ia.md) |
-| **Segurança** | Nenhum dado pessoal pedido ou guardado; entradas validadas; SQL parametrizado; proteção contra injeção de prompt; limite de chamadas por IP; CSP restritiva | [`docs/plano_de_testes.md`](docs/plano_de_testes.md) |
-| **Qualidade** | 39 testes automatizados | `tests/` |
-| **CI** | A cada push, o GitHub Actions gera os dados e roda os **39 testes**, compila o app e **constrói a imagem Docker**, repetindo o pipeline e os testes dentro do contêiner antes de subir a API e conferir `/api/saude` | [`ci.yml`](.github/workflows/ci.yml) |
+| **Segurança** | Nenhum dado pessoal pedido ou guardado; entradas validadas; SQL parametrizado; proteção contra injeção de prompt; limite de chamadas por IP; CSP restritiva; chave de API só em variável de ambiente | [`docs/plano_de_testes.md`](docs/plano_de_testes.md) |
+| **Qualidade** | 40 testes automatizados | `tests/` |
+| **CI** | A cada push, o GitHub Actions gera os dados e roda os **40 testes**, compila o app e **constrói a imagem Docker**, repetindo o pipeline e os testes dentro do contêiner antes de subir a API e conferir `/api/saude` | [`ci.yml`](.github/workflows/ci.yml) |
 
 ## Limitações
 
@@ -114,5 +117,5 @@ ingestion/  pipeline/  analytics/  ml/  transparencia/   camadas de dados e aná
 ia/                                                      assistente: prompt, LLM, avaliação
 api/                                                     FastAPI: rotas, validação, segurança
 web/                                                     app React para celular
-tests/  docs/                                            39 testes e documentação
+tests/  docs/                                            40 testes e documentação
 ```

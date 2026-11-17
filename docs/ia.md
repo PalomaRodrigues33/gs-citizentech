@@ -129,3 +129,21 @@ motivo de a integração existir; fica como próximo passo medir isso.
 `mock` (padrão, offline), `groq`, `gemini`, `openai_compat` (OpenRouter, Mistral, Ollama local) e `anthropic`,
 escolhidos pela variável `LLM_PROVIDER`. `python -m ia.smoke` faz uma chamada de teste; `--modelos` lista os
 modelos da sua chave.
+
+### Onde fica a chave de API
+
+Em nenhum lugar do repositório. `config._carregar_env()` lê um arquivo `.env` na raiz, se existir, e põe o
+conteúdo nas variáveis de ambiente; o `.env` está no `.gitignore` e nunca é versionado. O que já está no
+ambiente tem prioridade sobre o arquivo, então a chave exportada no terminal, ou o segredo configurado no
+GitHub Actions, ganha do `.env`. O leitor tem vinte linhas de biblioteca padrão, sem dependência nova.
+
+O formato está em [`.env.exemplo`](../.env.exemplo), que é versionado **sem chave nenhuma**:
+
+```
+LLM_PROVIDER=groq
+GROQ_API_KEY=...
+GROQ_MODEL=...
+```
+
+Copie para `.env`, preencha e rode `python -m ia.smoke --modelos` para ver os modelos disponíveis. Teste CT-40
+cobre a leitura do arquivo e a prioridade do ambiente.
