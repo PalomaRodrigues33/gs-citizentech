@@ -27,6 +27,19 @@ python iniciar.py
 Depois abra **http://localhost:8000**. Esse comando faz tudo: instala as dependências que faltam, gera os dados
 e o modelo, compila o app React e sobe o servidor. A primeira vez leva uns 3 minutos; nas seguintes, segundos.
 
+### Ligar o modelo de linguagem (opcional)
+
+Até aqui o aplicativo já funciona por completo, com o assistente escolhendo o serviço por **regras de
+palavra-chave**. Para usar o modelo de linguagem, que é o que dá os 93,3% de acerto da tabela abaixo:
+
+1. Crie uma chave gratuita em [console.groq.com/keys](https://console.groq.com/keys).
+2. Copie `.env.exemplo` para `.env` e cole a chave em `GROQ_API_KEY`.
+3. Rode `python iniciar.py` de novo. A tela "Como funciona" deixa de avisar que está sem chave.
+
+O `.env` está no `.gitignore` e nunca é versionado. Se a Groq tiver aposentado o modelo do exemplo, veja os
+nomes atuais com `python -m ia.smoke --modelos` e ajuste `GROQ_MODEL`. Para refazer a medição de antes e
+depois: `python -m ia.avaliacao`.
+
 <details>
 <summary>Outras opções: celular, testes, Docker, etapa por etapa</summary>
 
@@ -57,9 +70,6 @@ docker compose --profile test run --rm tests
 ```
 
 Para mexer no app, com recarga a cada alteração: deixe a API rodando e, em outro terminal, `cd web; npm run dev`.
-
-Para ligar o modelo de linguagem no assistente (sem chave ele funciona por regras): copie `.env.exemplo` para
-`.env`, preencha a chave e rode de novo. O `.env` não vai para o Git.
 
 </details>
 
