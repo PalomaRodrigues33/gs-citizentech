@@ -1,13 +1,13 @@
-# CitizenTech: a zeladoria do seu bairro, com dados do SP156
+# ZeladoriaSP — zeladoria do seu bairro, com dados do SP156
 
 > **Vídeo pitch:** _(inserir link público aqui)_ · **Integrantes:** ver `grupo.txt`
 
 App de celular que mostra quanto tempo a Prefeitura de São Paulo leva para resolver buracos e calçadas no seu
-bairro, e ajuda a abrir o pedido certo no SP156. Feito para quem depende de ruas e calçadas em bom estado: em
-especial idosos, pessoas com deficiência e quem anda com carrinho de bebê.
+bairro, e ajuda a abrir o pedido certo no SP156. Pensado para quem depende de ruas e calçadas em bom estado —
+em especial idosos, pessoas com deficiência e quem anda com carrinho de bebê.
 
-Ele **não recebe nem guarda pedidos**. Prepara o texto e leva o cidadão ao canal oficial (portal, aplicativo,
-WhatsApp ou telefone 156); quem recebe e resolve é a Prefeitura.
+Ele **não recebe nem guarda pedidos**: só prepara o texto e leva o cidadão ao canal oficial (portal, aplicativo,
+WhatsApp ou telefone 156). Quem recebe e resolve é a Prefeitura.
 
 | Tela | Pergunta que responde |
 |---|---|
@@ -18,19 +18,22 @@ WhatsApp ou telefone 156); quem recebe e resolve é a Prefeitura.
 
 ## Como executar
 
-Precisa de **Python 3.12+** e **Node 20+**. O arquivo de dados do SP156 já vem no repositório.
+Pré-requisitos: **Python 3.12+**, **Node 20+** e **Git**. O arquivo de dados do SP156 já vem no repositório.
 
 ```powershell
+git clone https://github.com/PalomaRodrigues33/gs-citizentech
+cd citizentech
 python iniciar.py
 ```
 
-Depois abra **http://localhost:8000**. Esse comando faz tudo: instala as dependências que faltam, gera os dados
-e o modelo, compila o app React e sobe o servidor. A primeira vez leva uns 3 minutos; nas seguintes, segundos.
+Depois abra **http://localhost:8000**. O `iniciar.py` faz tudo: instala as dependências que faltam, gera os
+dados e o modelo, compila o app React e sobe o servidor. A primeira vez leva uns 3 minutos; nas seguintes,
+segundos.
 
 ### Ligar o modelo de linguagem (opcional)
 
-Até aqui o aplicativo já funciona por completo, com o assistente escolhendo o serviço por **regras de
-palavra-chave**. Para usar o modelo de linguagem, que é o que dá os 93,3% de acerto da tabela abaixo:
+Sem essa etapa o app já funciona por completo, com o assistente escolhendo o serviço por **regras de
+palavra-chave** (83,3% de acerto). Para usar o modelo de linguagem (93,3% de acerto, tabela abaixo):
 
 1. Crie uma chave gratuita em [console.groq.com/keys](https://console.groq.com/keys).
 2. Copie `.env.exemplo` para `.env` e cole a chave em `GROQ_API_KEY`.
@@ -79,9 +82,9 @@ Para mexer no app, com recarga a cada alteração: deixe a API rodando e, em out
 quais **84.487** são de zeladoria de ruas e calçadas, em 13 serviços. O arquivo não tem dado pessoal de quem
 pediu. **Nenhum dado é simulado.** Recorte e decisões em [`docs/fontes_de_dados.md`](docs/fontes_de_dados.md).
 
-Dois achados que o app mostra: 9 em cada 10 pedidos de **obstáculo na calçada** e de **calçada particular
-danificada** seguiam abertos em 30/09, enquanto entulho e varrição saem em 1 dia na maioria dos casos; e 17% dos
-pontos têm mais de um pedido no mesmo lugar.
+Dois achados do app: 9 em cada 10 pedidos de **obstáculo na calçada** e de **calçada particular danificada**
+seguiam abertos em 30/09, enquanto entulho e varrição saem em 1 dia na maioria dos casos; e 17% dos pontos têm
+mais de um pedido no mesmo lugar.
 
 ## Arquitetura
 
