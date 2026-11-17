@@ -1,7 +1,10 @@
 # Plano de testes
 
 Execução: `python -m pytest -v` (ou `docker compose --profile test run --rm tests`).
-**Evidência para o PDF:** print do terminal com `40 passed`.
+**Evidência para o PDF:** print do terminal com `41 passed`.
+
+A suíte roda offline: o `conftest.py` força o assistente de regras (`LLM_PROVIDER=mock`), então os testes
+não dependem de chave de API nem de rede, e passam igual na máquina do avaliador e no CI.
 
 Os testes de API (CT-29 a CT-37) usam os dados reais gerados por `python run_all.py`; sem eles, são ignorados
 (aparecem como `skipped`). Nos testes, a IA não grava exemplos na camada gold.
@@ -48,6 +51,7 @@ Os testes de API (CT-29 a CT-37) usam os dados reais gerados por `python run_all
 | CT-38 | Segurança | Link da página do serviço no SP156 | Sai da `config`, domínio oficial; nome fora dos 13 não gera link |
 | CT-39 | API/dados | Lista de regiões e bairros | Cada distrito em uma região só; nenhum órgão executor na lista |
 | CT-40 | Segurança | Chave de API fora do código | Lê do `.env` (não versionado); variável de ambiente tem prioridade |
+| CT-41 | IA | Rascunho por regras em todos os serviços | Os 13 serviços têm frase de abertura; nenhum relato rotulado cai no modo de erro |
 
 ## Teste de interface (evidência visual)
 

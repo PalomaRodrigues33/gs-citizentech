@@ -1,4 +1,4 @@
-"""Testes do assistente de IA (CT-22 a CT-28, CT-38 e CT-40)."""
+"""Testes do assistente de IA (CT-22 a CT-28, CT-38, CT-40 e CT-41)."""
 import json
 import os
 
@@ -108,3 +108,13 @@ def test_ct40_env_carrega_a_chave_e_nao_sobrescreve_o_ambiente(tmp_path, monkeyp
     assert "SEM_IGUAL" not in os.environ
     cfg._carregar_env(tmp_path / "nao_existe")           # ausência de .env não quebra nada
     assert not (cfg.BASE_DIR / ".env").exists() or ".env" in (cfg.BASE_DIR / ".gitignore").read_text()
+
+
+def test_ct41_todo_servico_tem_frase_de_abertura():
+    """Serviço sem frase de abertura virava KeyError e caía no rascunho de erro (bueiro, corrigido)."""
+    assert set(cfg.SERVICOS) <= set(MockLLM.ABERTURA) and "outro" in MockLLM.ABERTURA
+    llm = MockLLM()
+    for texto, _ in ROTULADOS:
+        r = assist(texto, llm)
+        assert r["erro"] == "", f"{texto!r} -> {r['erro']}"
+        assert r["texto_solicitacao"].startswith(MockLLM.ABERTURA[r["servico"]])

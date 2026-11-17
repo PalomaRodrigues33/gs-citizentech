@@ -94,22 +94,33 @@ problema real (poste → "outro").
 
 ### Antes x depois (30 relatos rotulados, `ia/rotulados.py`)
 
-| | Serviço exato | Tipo de problema |
-|---|---:|---:|
-| **Antes:** regras de palavras-chave (`LLM_PROVIDER=mock`) | 83% (25/30) | 90% |
-| **Depois:** LLM com o prompt acima | não medido nesta entrega | |
+| | Serviço exato | Tipo de problema | Respostas inválidas |
+|---|---:|---:|---:|
+| **Antes:** regras de palavras-chave (`LLM_PROVIDER=mock`) | 83,3% (25/30) | 90,0% | 0 |
+| **Depois:** LLM com o prompt acima (`groq:openai/gpt-oss-120b`) | **93,3% (28/30)** | **100,0%** | 0 |
 
-**O assistente avaliado e usado na demonstração é o de regras (`mock`).** As regras foram escritas por nós
-olhando o mesmo conjunto de 30 relatos, então 83% é um número **otimista**: em relatos novos o acerto tende a
-ser menor. A integração com LLM (prompt, few-shot, proteções e validação abaixo) está pronta e testada com
-respostas simuladas, mas não medimos um LLM real nesta entrega (as cotas gratuitas testadas falharam). Para
-medir: configure `LLM_PROVIDER` e a chave e rode `python -m ia.avaliacao`; o resultado vai para
-`data/gold/metricas_assistente.json` e aparece sozinho na tela "Como funciona".
+Ganho de 10 pontos no serviço exato, e o tipo de problema passa a acertar sempre — ou seja, quando o modelo
+erra, erra entre serviços parecidos do mesmo grupo, nunca manda o cidadão para a área errada da Prefeitura.
 
-Onde as regras erram: relatos sem a palavra óbvia ("buracão", "virou peneira", "rombo"), e escolhas que
-dependem de contexto (calçada em frente a loja x em praça).
+**A comparação é conservadora a favor do modelo.** As regras foram escritas por nós olhando esses mesmos 30
+relatos, então os 83,3% são um número **otimista**; o LLM nunca viu o conjunto. A diferença real em relatos
+novos tende a ser maior do que 10 pontos.
+
+Onde as regras erram e o modelo acerta: relatos sem a palavra óbvia ("buracão", "virou peneira", "rombo") e
+escolhas que dependem de contexto (calçada em frente a loja x em praça). O modelo também **reescreve** a
+descrição em português correto, o que as regras não fazem de jeito nenhum.
+
+Os dois números saem de `python -m ia.avaliacao`, que roda os 30 relatos nos dois caminhos e grava
+`data/gold/metricas_assistente.json`; a tela "Como funciona" lê esse arquivo. Sem chave de API o aplicativo
+continua funcionando pelas regras, com o aviso na tela de que o modelo de linguagem não está configurado.
 
 ### Demonstração com entrada e saída
+
+`data/gold/assistente_exemplos.json` guarda entradas e saídas reais, cada uma com o provedor que a produziu
+(`groq:openai/gpt-oss-120b` nas atuais). A camada gratuita da Groq tem teto de 200 mil tokens por dia, e cada
+chamada deste prompt gasta cerca de 2.400; rodar a avaliação dos 30 relatos duas vezes esgota o dia. Ao
+estourar, a API responde 429 e o aplicativo entrega o rascunho simples com aviso, sem quebrar — é o caminho de
+falha do CT-26.
 
 Toda chamada real ao assistente é registrada (sem IP nem dado pessoal) em `data/gold/assistente_exemplos.json`.
 Exemplo com as regras simples, que mostra o limite delas:
@@ -129,6 +140,14 @@ motivo de a integração existir; fica como próximo passo medir isso.
 `mock` (padrão, offline), `groq`, `gemini`, `openai_compat` (OpenRouter, Mistral, Ollama local) e `anthropic`,
 escolhidos pela variável `LLM_PROVIDER`. `python -m ia.smoke` faz uma chamada de teste; `--modelos` lista os
 modelos da sua chave.
+
+Duas armadilhas que custaram tempo e ficam registradas aqui:
+
+- **Modelo aposentado.** O provedor retira modelos sem avisar e a API responde 404. `python -m ia.smoke --modelos`
+  lista o que a sua chave vê hoje; o erro 404 do código já traz essa dica.
+- **Modelo de raciocínio.** O `gpt-oss` gasta algumas centenas de tokens "pensando" antes de escrever, e esses
+  tokens contam no `max_tokens`. Com o teto baixo a resposta era cortada antes do JSON e voltava vazia. O teto
+  agora é 2500, ajustável por `LLM_MAX_TOKENS`.
 
 ### Onde fica a chave de API
 

@@ -78,6 +78,8 @@ class MockLLM:
             "Venho denunciar descarte irregular de entulho e outros resíduos em área pública.",
         "Denunciar caçamba irregular de entulho de construção":
             "Venho denunciar caçamba de entulho de construção em situação irregular.",
+        "Solicitar limpeza de bueiros, boca de lobo e poços de visita":
+            "Solicito a limpeza de bueiro, boca de lobo ou poço de visita.",
         "Fazer reclamação de falta de varrição": "Venho reclamar da falta de varrição na via.",
         "Sacos de varrição - Fazer reclamação de falta de remoção":
             "Venho reclamar da falta de remoção dos sacos de varrição.",
@@ -104,7 +106,7 @@ class MockLLM:
         faltando.append("Foto nítida do local")
         # Uma linha por informação: é assim que o atendente do SP156 lê o campo de descrição.
         descricao = relato.rstrip(" .")
-        linhas = [self.ABERTURA[servico], "", "Descrição: " + descricao[:1].upper() + descricao[1:] + "."]
+        linhas = [self.ABERTURA.get(servico, self.ABERTURA["outro"]), "", "Descrição: " + descricao[:1].upper() + descricao[1:] + "."]
         if "Endereço completo" in faltando:
             linhas.append("Endereço: [endereço completo, com número]")
         if "Ponto de referência" in faltando:
@@ -244,7 +246,10 @@ class OpenAICompatLLM:
 
     def complete(self, system: str, messages: list[dict]) -> str:
         body = json.dumps({
-            "model": self.model, "temperature": 0, "max_tokens": 900,
+            # Teto alto porque modelos de raciocínio (gpt-oss, o-series) gastam tokens pensando antes
+            # de escrever: com 900 o JSON era cortado no meio e a resposta voltava vazia.
+            "model": self.model, "temperature": 0,
+            "max_tokens": int(os.getenv("LLM_MAX_TOKENS", "2500")),
             "messages": [{"role": "system", "content": system}] + messages,
         }).encode("utf-8")
         for attempt in range(self.max_retries + 1):

@@ -35,7 +35,7 @@ export default function Sobre() {
       {a?.antes_sem_ia && (
         <p className="muted small">Escolha do serviço, em {a.antes_sem_ia.casos} relatos de teste: {Math.round(100 * a.antes_sem_ia.acuracia_servico)}% com regras simples
           {a.depois_com_ia ? `, ${Math.round(100 * a.depois_com_ia.acuracia_servico)}% com o modelo de linguagem` : ""}.
-          {!a.depois_com_ia && " As regras foram escritas olhando esses mesmos relatos, então esse número é otimista."}</p>
+          {" As regras foram escritas olhando esses mesmos relatos, então o número delas é otimista; o modelo nunca viu o conjunto."}</p>
       )}
 
       <h2>O que os números não dizem</h2>
