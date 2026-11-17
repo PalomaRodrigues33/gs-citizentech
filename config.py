@@ -104,6 +104,9 @@ def url_do_servico(nome: str):
 
 
 # Canais oficiais, conferidos em 14/11/2026. Saem daqui, nunca do modelo: ele não pode inventar link.
+# A outra afirmação do app sobre regra da cidade — a calçada em frente a um imóvel é responsabilidade do
+# proprietário, e a Prefeitura fiscaliza — foi conferida em:
+# https://prefeitura.sp.gov.br/web/ipiranga/w/a-responsabilidade-da-manuten%C3%A7%C3%A3o-das-cal%C3%A7adas-%C3%A9-de-responsabilidade-do-propriet%C3%A1rio
 CANAIS = [
     {"id": "portal", "nome": "Portal SP156", "como": "sp156.prefeitura.sp.gov.br, pelo navegador",
      "url": "https://sp156.prefeitura.sp.gov.br/portal",

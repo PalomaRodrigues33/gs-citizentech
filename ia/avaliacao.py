@@ -43,7 +43,7 @@ def main():
         out["detalhes_depois"] = depois["detalhes"]
     else:
         out["nota"] = ("Provedor mock: só a linha de base foi medida. Defina LLM_PROVIDER e a chave "
-                       "(veja docs/ia.md) e rode de novo para medir o LLM.")
+                       "(veja o README) e rode de novo para medir o LLM.")
     cfg.GOLD_DIR.mkdir(parents=True, exist_ok=True)
     path = Path(cfg.GOLD_DIR) / "metricas_assistente.json"
     path.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")

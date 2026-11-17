@@ -5,7 +5,7 @@ const { chromium, devices } = require("playwright");
 const path = require("path");
 
 (async () => {
-  const out = path.join(__dirname, "..", "docs", "img", "telas");
+  const out = path.join(__dirname, "..", "capturas", "telas");
   const browser = await chromium.launch();
   for (const scheme of ["light", "dark"]) {
     const ctx = await browser.newContext({ ...devices["iPhone 13"], deviceScaleFactor: 2, colorScheme: scheme });

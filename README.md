@@ -22,7 +22,7 @@ Pré-requisitos: **Python 3.12+**, **Node 20+** e **Git**. O arquivo de dados do
 
 ```powershell
 git clone https://github.com/PalomaRodrigues33/gs-citizentech
-cd citizentech
+cd gs-citizentech
 python iniciar.py
 ```
 
@@ -80,7 +80,7 @@ Para mexer no app, com recarga a cada alteração: deixe a API rodando e, em out
 
 **SP156 – Solicitações** (Prefeitura de São Paulo, dados abertos), de 01/07 a 30/09/2026: 484.232 pedidos, dos
 quais **84.487** são de zeladoria de ruas e calçadas, em 13 serviços. O arquivo não tem dado pessoal de quem
-pediu. **Nenhum dado é simulado.** Recorte e decisões em [`docs/fontes_de_dados.md`](docs/fontes_de_dados.md).
+pediu. **Nenhum dado é simulado.** O recorte, as decisões de tratamento e as fontes oficiais estão no PDF do projeto.
 
 Dois achados do app: 9 em cada 10 pedidos de **obstáculo na calçada** e de **calçada particular danificada**
 seguiam abertos em 30/09, enquanto entulho e varrição saem em 1 dia na maioria dos casos; e 17% dos pontos têm
@@ -102,18 +102,21 @@ data/gold    lista de atrasos, análises e métricas + tabelas no SQLite
 web/ (React)                 app para celular, servido pela própria API
 ```
 
-Diagrama e decisões em [`docs/arquitetura.md`](docs/arquitetura.md).
+Diagrama em [`capturas/arquitetura.png`](capturas/arquitetura.png) (fonte Mermaid em `capturas/arquitetura.mmd`).
 
 ## O que tem dentro
 
 | Área | O que foi feito | Detalhe |
 |---|---|---|
 | **Funções analíticas** | 4 consultas SQL com funções de janela (`ROW_NUMBER`, `LAG`, `RANK`, `NTILE`, `PERCENT_RANK`, média móvel), sempre parametrizadas | `analytics/sql/` |
-| **IA 1 — previsão** | Chance de resolução em 7 dias. Treina em jul–ago, testa em setembro: AUC **0,861** contra 0,830 da regra simples; dentro de cada tipo a regra não distingue nada (0,50) e o modelo chega a 0,90 | [`docs/ia.md`](docs/ia.md) |
-| **IA 2 — assistente** | Lê o relato livre e escolhe o **serviço exato** entre os 13, escreve o pedido e lista o que falta. Com o modelo de linguagem acerta o serviço exato em **93,3%** dos 30 relatos rotulados, contra 83,3% das regras de palavra-chave (o grupo do problema vai a 100%). Sem chave de API continua funcionando pelas regras | [`docs/ia.md`](docs/ia.md) |
-| **Segurança** | Nenhum dado pessoal pedido ou guardado; entradas validadas; SQL parametrizado; proteção contra injeção de prompt; limite de chamadas por IP; CSP restritiva; chave de API só em variável de ambiente | [`docs/plano_de_testes.md`](docs/plano_de_testes.md) |
+| **IA 1 — previsão** | Chance de resolução em 7 dias. Treina em jul–ago, testa em setembro: AUC **0,861** contra 0,830 da regra simples; dentro de cada tipo a regra não distingue nada (0,50) e o modelo chega a 0,90 | `ml/modelo.py` |
+| **IA 2 — assistente** | Lê o relato livre e escolhe o **serviço exato** entre os 13, escreve o pedido e lista o que falta. Com o modelo de linguagem acerta o serviço exato em **93,3%** dos 30 relatos rotulados, contra 83,3% das regras de palavra-chave (o grupo do problema vai a 100%). Sem chave de API continua funcionando pelas regras | `ia/assistente.py` |
+| **Segurança** | Nenhum dado pessoal pedido ou guardado; entradas validadas; SQL parametrizado; proteção contra injeção de prompt; limite de chamadas por IP; CSP restritiva; chave de API só em variável de ambiente | `api/`, `tests/` |
 | **Qualidade** | 41 testes automatizados | `tests/` |
 | **CI** | A cada push, o GitHub Actions gera os dados e roda os **41 testes**, compila o app e **constrói a imagem Docker**, repetindo o pipeline e os testes dentro do contêiner antes de subir a API e conferir `/api/saude` | [`ci.yml`](.github/workflows/ci.yml) |
+
+A documentação completa — arquitetura, indicadores, prompt da IA, plano de testes e evidências de
+execução — está no **PDF entregue junto com este repositório**.
 
 ## Limitações
 
@@ -130,5 +133,6 @@ ingestion/  pipeline/  analytics/  ml/  transparencia/   camadas de dados e aná
 ia/                                                      assistente: prompt, LLM, avaliação
 api/                                                     FastAPI: rotas, validação, segurança
 web/                                                     app React para celular
-tests/  docs/                                            41 testes e documentação
+tests/                                                   41 testes automatizados
+capturas/                                                diagrama da arquitetura e telas do app
 ```

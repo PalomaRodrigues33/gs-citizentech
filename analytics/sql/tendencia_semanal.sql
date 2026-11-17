@@ -1,6 +1,6 @@
 -- Pergunta do cidadão: "Minha região está melhorando ou piorando?"
 -- Funções de janela: AVG() OVER (ROWS BETWEEN 2 PRECEDING ...) = média móvel de 3 semanas; LAG() = variação semanal.
--- A partir de :inicio porque 01-12/07 teve quebra na série (ver docs/fontes_de_dados.md).
+-- A partir de :inicio porque 01-12/07 teve quebra na série (ver README).
 -- Parâmetros: :subprefeitura (NULL = só a cidade), :grupo (NULL = todos)
 WITH semanal AS (
     SELECT strftime('%Y-%W', data_abertura) AS semana,
