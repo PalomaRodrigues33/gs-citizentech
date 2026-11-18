@@ -1,7 +1,10 @@
-Nome do grupo: ZeladoriaSP
 Integrantes:
-- (nome completo 1)
-- (nome completo 2)
-- (nome completo 3)
+Gustavo Rezende Berger - RM 93331
+Gabriel Amorim Martins Gonçalves - RM 550444
+Paloma Mirela dos Santos Rodrigues - RM 551321
+André Fernandes Chamis - RM 97891
+Lucas Braun - RM 550534
+
 Link público do vídeo: (inserir)
-Repositório: (inserir)
+
+Repositório: https://github.com/PalomaRodrigues33/gs-citizentech
