@@ -2,9 +2,7 @@
 
 > **Vídeo pitch:** _https://www.youtube.com/watch?v=9661oN_Dv1M_ ·
 
-App de celular que mostra quanto tempo a Prefeitura de São Paulo leva para resolver buracos e calçadas no seu
-bairro, e ajuda a abrir o pedido certo no SP156. Pensado para quem depende de ruas e calçadas em bom estado —
-em especial idosos, pessoas com deficiência e quem anda com carrinho de bebê.
+O ZeladoriaSP mostra quanto tempo a Prefeitura de São Paulo leva para resolver problemas de rua e calçada no bairro do cidadão — buraco no asfalto, calçada quebrada, falta de acessibilidade, entulho e descarte irregular de lixo, entre outros, e prepara o pedido certo no SP156. Pensado para quem depende de ruas e calçadas em bom estado — em especial idosos, pessoas com deficiência e quem anda com carrinho de bebê.
 
 Ele **não recebe nem guarda pedidos**: só prepara o texto e leva o cidadão ao canal oficial (portal, aplicativo,
 WhatsApp ou telefone 156). Quem recebe e resolve é a Prefeitura.
