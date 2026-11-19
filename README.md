@@ -1,6 +1,6 @@
 # ZeladoriaSP — zeladoria do seu bairro, com dados do SP156
 
-> **Vídeo pitch:** _(inserir link público aqui)_ · **Integrantes:** ver `grupo.txt`
+> **Vídeo pitch:** _https://www.youtube.com/watch?v=9661oN_Dv1M_ ·
 
 App de celular que mostra quanto tempo a Prefeitura de São Paulo leva para resolver buracos e calçadas no seu
 bairro, e ajuda a abrir o pedido certo no SP156. Pensado para quem depende de ruas e calçadas em bom estado —
